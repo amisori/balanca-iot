@@ -30,6 +30,8 @@ firmware/*.bin
 *.png
 *.jpg
 *.jpeg
+# Excecao: icones do app Android (necessarios para o build)
+!app/android/app/src/main/res/**/*.png
 Evidencias_Balanca_IoT.docx
 Evidencias_Balanca_IoT_v2.docx
 
