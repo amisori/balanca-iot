@@ -27,8 +27,8 @@
   },
   "devDependencies": {
     "@react-native-community/cli": "latest",
-    "@babel/core": "^7.20.0",
-    "@babel/preset-env": "^7.20.0",
+    "@babel/core": "^7.25.0",
+    "@babel/preset-env": "^7.25.0",
     "@react-native/babel-preset": "^0.76.0",
     "@testing-library/jest-native": "^5.4.0",
     "@testing-library/react-native": "^12.4.0",
