@@ -113,17 +113,40 @@ jobs:
         working-directory: app/android
         run: chmod +x gradlew
 
-      - name: Build APK Release
+      - name: Criar google-services.json placeholder para CI
+        run: |
+          cat > app/android/app/google-services.json << 'EOF'
+          {
+            "project_info": {
+              "project_number": "000000000000",
+              "project_id": "balanca-iot-ci",
+              "storage_bucket": "balanca-iot-ci.appspot.com"
+            },
+            "client": [{
+              "client_info": {
+                "mobilesdk_app_id": "1:000000000000:android:0000000000000000",
+                "android_client_info": { "package_name": "com.balancaiot" }
+              },
+              "api_key": [{ "current_key": "CI_PLACEHOLDER_KEY" }],
+              "services": {
+                "appinvite_service": { "other_platform_oauth_client": [] }
+              }
+            }],
+            "configuration_version": "1"
+          }
+          EOF
+
+      - name: Build APK Debug
         working-directory: app/android
-        run: ./gradlew assembleRelease --no-daemon
+        run: ./gradlew assembleDebug --no-daemon
         env:
           JAVA_OPTS: "-Xmx4g"
 
       - name: Upload APK como artefato
         uses: actions/upload-artifact@v4
         with:
-          name: BalancaIoT-release-${{ github.sha }}
-          path: app/android/app/build/outputs/apk/release/*.apk
+          name: BalancaIoT-debug-${{ github.sha }}
+          path: app/android/app/build/outputs/apk/debug/*.apk
           retention-days: 30
 
   # ==========================================
