@@ -1,4 +1,30 @@
-const { predictConsumption, linearRegression } = require("../src/services/mlService");
+const { predictConsumption, linearRegression, aggregateStats } = require("../src/services/mlService");
+
+describe("aggregateStats", () => {
+  test("retorna estrutura vazia para histórico vazio", () => {
+    const s = aggregateStats([]);
+    expect(s.totalRecords).toBe(0);
+    expect(s.daily).toEqual([]);
+    expect(s.peakConsumptionDay).toBeNull();
+  });
+
+  test("agrega métricas e consumo diário corretamente", () => {
+    const day = 86400;
+    const base = 1700000000;
+    const history = [
+      { timestamp: base + 0 * day, netKg: 13 },
+      { timestamp: base + 1 * day, netKg: 10 },
+      { timestamp: base + 2 * day, netKg: 6 },
+    ];
+    const s = aggregateStats(history);
+    expect(s.totalRecords).toBe(3);
+    expect(s.daily.length).toBe(3);
+    expect(s.maxNetKg).toBeCloseTo(13, 3);
+    expect(s.minNetKg).toBeCloseTo(6, 3);
+    expect(s.avgConsumptionKgPerDay).toBeGreaterThan(0);
+    expect(s.peakConsumptionDay).not.toBeNull();
+  });
+});
 
 describe("linearRegression", () => {
   test("slope e intercept corretos", () => {

@@ -47,3 +47,20 @@ describe("POST /api/predict", () => {
     expect(res.statusCode).toBe(400);
   });
 });
+
+describe("GET /api/history/stats", () => {
+  it("retorna estatísticas agregadas (modo sem Firebase)", async () => {
+    const res = await request(app).get("/api/history/stats");
+    expect(res.statusCode).toBe(200);
+    expect(res.body.success).toBe(true);
+    expect(res.body.stats).toHaveProperty("totalRecords");
+    expect(res.body.stats).toHaveProperty("daily");
+    expect(Array.isArray(res.body.stats.daily)).toBe(true);
+  });
+
+  it("respeita e limita o parâmetro limit", async () => {
+    const res = await request(app).get("/api/history/stats?limit=5000");
+    expect(res.statusCode).toBe(200);
+    expect(res.body.limit).toBe(1000);
+  });
+});

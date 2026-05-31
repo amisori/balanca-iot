@@ -119,4 +119,109 @@ function predictConsumption(history, capacityKg) {
   };
 }
 
-module.exports = { predictConsumption, linearRegression };
+/**
+ * Agrega o histórico de pesagens em estatísticas para análise de dados.
+ *
+ * Faz o "rollup" dos registros brutos em métricas diárias e globais, servindo
+ * de base para dashboards e insights (camada de análise sobre os dados IoT).
+ *
+ * @param {Array<{ timestamp: number, netKg: number }>} history
+ * @returns {{
+ *   totalRecords: number,
+ *   periodDays: number,
+ *   firstTimestamp: number | null,
+ *   lastTimestamp: number | null,
+ *   avgNetKg: number,
+ *   minNetKg: number | null,
+ *   maxNetKg: number | null,
+ *   avgConsumptionKgPerDay: number,
+ *   peakConsumptionDay: { date: string, consumptionKg: number } | null,
+ *   daily: Array<{ date: string, records: number, avgNetKg: number, consumptionKg: number }>
+ * }}
+ */
+function aggregateStats(history) {
+  const empty = {
+    totalRecords: 0,
+    periodDays: 0,
+    firstTimestamp: null,
+    lastTimestamp: null,
+    avgNetKg: 0,
+    minNetKg: null,
+    maxNetKg: null,
+    avgConsumptionKgPerDay: 0,
+    peakConsumptionDay: null,
+    daily: [],
+  };
+
+  if (!Array.isArray(history) || history.length === 0) return empty;
+
+  const sorted = [...history]
+    .filter((h) => Number.isFinite(h.timestamp) && Number.isFinite(h.netKg))
+    .sort((a, b) => a.timestamp - b.timestamp);
+
+  if (sorted.length === 0) return empty;
+
+  const nets = sorted.map((h) => h.netKg);
+  const avgNetKg = nets.reduce((s, v) => s + v, 0) / nets.length;
+  const minNetKg = Math.min(...nets);
+  const maxNetKg = Math.max(...nets);
+
+  const firstTimestamp = sorted[0].timestamp;
+  const lastTimestamp  = sorted[sorted.length - 1].timestamp;
+  const periodDays = Math.max(0, (lastTimestamp - firstTimestamp) / 86400);
+
+  // Agrupa por dia (UTC)
+  const buckets = new Map();
+  for (const h of sorted) {
+    const date = new Date(h.timestamp * 1000).toISOString().split("T")[0];
+    if (!buckets.has(date)) buckets.set(date, []);
+    buckets.get(date).push(h.netKg);
+  }
+
+  const dailyKeys = [...buckets.keys()].sort();
+  const daily = dailyKeys.map((date, idx) => {
+    const vals = buckets.get(date);
+    const avg = vals.reduce((s, v) => s + v, 0) / vals.length;
+    // Consumo do dia = queda do peso médio em relação ao dia anterior
+    let consumptionKg = 0;
+    if (idx > 0) {
+      const prevVals = buckets.get(dailyKeys[idx - 1]);
+      const prevAvg = prevVals.reduce((s, v) => s + v, 0) / prevVals.length;
+      consumptionKg = Math.max(0, prevAvg - avg);
+    }
+    return {
+      date,
+      records: vals.length,
+      avgNetKg: parseFloat(avg.toFixed(3)),
+      consumptionKg: parseFloat(consumptionKg.toFixed(3)),
+    };
+  });
+
+  const totalConsumption = daily.reduce((s, d) => s + d.consumptionKg, 0);
+  const avgConsumptionKgPerDay = periodDays > 0 ? totalConsumption / periodDays : 0;
+
+  let peakConsumptionDay = null;
+  for (const d of daily) {
+    if (!peakConsumptionDay || d.consumptionKg > peakConsumptionDay.consumptionKg) {
+      peakConsumptionDay = { date: d.date, consumptionKg: d.consumptionKg };
+    }
+  }
+  if (peakConsumptionDay && peakConsumptionDay.consumptionKg === 0) {
+    peakConsumptionDay = null;
+  }
+
+  return {
+    totalRecords: sorted.length,
+    periodDays: parseFloat(periodDays.toFixed(2)),
+    firstTimestamp,
+    lastTimestamp,
+    avgNetKg: parseFloat(avgNetKg.toFixed(3)),
+    minNetKg: parseFloat(minNetKg.toFixed(3)),
+    maxNetKg: parseFloat(maxNetKg.toFixed(3)),
+    avgConsumptionKgPerDay: parseFloat(avgConsumptionKgPerDay.toFixed(4)),
+    peakConsumptionDay,
+    daily,
+  };
+}
+
+module.exports = { predictConsumption, linearRegression, aggregateStats };
