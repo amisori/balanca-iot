@@ -1,0 +1,23 @@
+{
+  "rules": {
+    "scale": {
+      "realtime": {
+        ".read": "auth != null",
+        ".write": true
+      },
+      "history": {
+        ".read": "auth != null",
+        ".write": true,
+        ".indexOn": ["timestamp"]
+      },
+      "config": {
+        ".read": "auth != null",
+        ".write": "auth != null"
+      },
+      "commands": {
+        ".read": true,
+        ".write": "auth != null"
+      }
+    }
+  }
+}

@@ -1,0 +1,31 @@
+# ===== Node =====
+node_modules/
+npm-debug.log*
+yarn-error.log
+coverage/
+.env
+
+# ===== React Native / Android =====
+app/android/.gradle/
+app/android/app/build/
+app/android/local.properties
+app/android/app/google-services.json
+app/.expo/
+app/ios/Pods/
+app/ios/build/
+app/ios/*.xcworkspace/xcuserdata/
+
+# ===== Firebase =====
+firebase/functions/node_modules/
+.firebase/
+firebase-debug.log
+
+# ===== Arduino =====
+firmware/*.hex
+firmware/*.elf
+firmware/*.bin
+
+# ===== OS =====
+.DS_Store
+Thumbs.db
+desktop.ini

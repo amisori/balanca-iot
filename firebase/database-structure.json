@@ -1,0 +1,35 @@
+{
+  "_comment": "Estrutura do Firebase Realtime Database - Balança IoT",
+  "scale": {
+    "realtime": {
+      "grossKg": 15.2,
+      "netKg": 2.2,
+      "percentage": 16.9,
+      "profile": "Botijão P13",
+      "type": "gas",
+      "taraKg": 13.0,
+      "capacityKg": 13.0,
+      "timestamp": 1748000000,
+      "status": "low"
+    },
+    "history": {
+      "1748000000": {
+        "grossKg": 20.0,
+        "netKg": 7.0,
+        "percentage": 53.8,
+        "profile": "Botijão P13",
+        "type": "gas",
+        "timestamp": 1748000000,
+        "status": "ok"
+      }
+    },
+    "config": {
+      "activeProfile": 0,
+      "alertThreshold": 15,
+      "userId": "uid_do_usuario"
+    },
+    "commands": {
+      "tare": false
+    }
+  }
+}
