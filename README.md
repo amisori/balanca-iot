@@ -90,10 +90,10 @@ Célula 1 e Célula 2 em paralelo → entrada do HX711
    - **HX711** by Bogdan Necula
    - **Firebase ESP32 Client** by mobizt (v4.x)
    - **ArduinoJson** by Benoit Blanchon
-2. Edite `firmware/config.h` com seu WiFi e Firebase
+2. Copie `firmware/balanca_iot/config.example.h` para `firmware/balanca_iot/config.h` e preencha com seu WiFi e Firebase
 3. Abra `firmware/calibracao.ino` e siga as instruções no Serial Monitor
-4. Anote o `CALIBRATION_FACTOR` e cole em `config.h`
-5. Carregue `firmware/balanca_iot.ino` no ESP32
+4. Anote o `CALIBRATION_FACTOR` e cole em `firmware/balanca_iot/config.h`
+5. Carregue `firmware/balanca_iot/balanca_iot.ino` no ESP32
 
 ### 3. Backend
 ```bash
@@ -188,9 +188,11 @@ O APK é publicado como artefato do GitHub Actions após cada build aprovado.
 ```
 Sistema - Balanca IoT/
 ├── firmware/
-│   ├── balanca_iot.ino     # Firmware principal
-│   ├── calibracao.ino      # Sketch de calibração
-│   └── config.h            # Configurações WiFi/Firebase/pinos
+│   ├── balanca_iot/
+│   │   ├── balanca_iot.ino     # Firmware principal
+│   │   ├── config.h            # Credenciais reais (gitignored)
+│   │   └── config.example.h   # Template de configuração
+│   └── calibracao.ino          # Sketch de calibração
 ├── backend/
 │   ├── src/
 │   │   ├── index.js        # Servidor Express
