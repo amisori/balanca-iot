@@ -28,6 +28,9 @@ firmware/*.bin
 # ===== Documentos academicos =====
 *.pdf
 
+# ===== Credenciais do firmware (NUNCA subir) =====
+firmware/balanca_iot/config.h
+
 # ===== OS =====
 .DS_Store
 Thumbs.db
