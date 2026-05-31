@@ -36,16 +36,13 @@ Evidencias_Balanca_IoT.docx
 Evidencias_Balanca_IoT_v2.docx
 
 # ===== Credenciais do firmware (NUNCA subir) =====
+firmware/config.h
 firmware/balanca_iot/config.h
 
 # ===== OS =====
 .DS_Store
 Thumbs.db
 desktop.ini
-Evidencias_Balanca_IoT_v2.docx
-
-# ===== Credenciais do firmware (NUNCA subir) =====
-firmware/balanca_iot/config.h
 
 # ===== OS =====
 .DS_Store
