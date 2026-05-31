@@ -38,12 +38,14 @@
   },
   "jest": {
     "preset": "react-native",
-    "setupFilesAfterFramework": ["@testing-library/jest-native/extend-expect"],
+    "setupFilesAfterEnv": ["@testing-library/jest-native/extend-expect"],
     "transformIgnorePatterns": [
-      "node_modules/(?!(react-native|@react-native|@react-native-firebase|@react-navigation|react-native-svg|react-native-vector-icons|react-native-safe-area-context|react-native-screens)/)"
+      "node_modules/(?!((jest-)?react-native|@react-native(-community)?|@react-native-firebase|@react-navigation|react-native-svg|react-native-vector-icons|react-native-safe-area-context|react-native-screens)/)"
     ],
     "moduleNameMapper": {
-      "^@react-native-firebase/(.*)$": "<rootDir>/__mocks__/firebase.js"
+      "^@react-native-firebase/(.*)$": "<rootDir>/__mocks__/firebase.js",
+      "^react-native-svg$": "<rootDir>/__mocks__/react-native-svg.js",
+      "^react-native-vector-icons/(.*)$": "<rootDir>/__mocks__/react-native-vector-icons.js"
     }
   }
 }

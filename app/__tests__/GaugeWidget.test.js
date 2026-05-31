@@ -1,13 +1,17 @@
 import React from 'react';
 import { render } from '@testing-library/react-native';
 
-// Mock react-native-svg
 jest.mock('react-native-svg', () => {
   const React = require('react');
   const { View } = require('react-native');
-  const mock = (name) => ({ children, ...props }) =>
-    React.createElement(View, { testID: name, ...props }, children);
+  const mock = (name) => {
+    const C = ({ children, ...props }) =>
+      React.createElement(View, { testID: name, ...props }, children);
+    C.displayName = name;
+    return C;
+  };
   return {
+    __esModule: true,
     default: mock('Svg'),
     Svg: mock('Svg'),
     Circle: mock('Circle'),
