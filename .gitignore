@@ -25,6 +25,9 @@ firmware/*.hex
 firmware/*.elf
 firmware/*.bin
 
+# ===== Documentos academicos =====
+*.pdf
+
 # ===== OS =====
 .DS_Store
 Thumbs.db
